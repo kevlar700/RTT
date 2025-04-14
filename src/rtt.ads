@@ -97,23 +97,23 @@ package RTT is
 
    --  Put Text into Up buffer with given Index of the control block.
    procedure Put
-     (Text  : String;
-      Block : not null access Control_Block;
-      Index : Index_Up_Max := 1);
+     (Text  :        String;
+      Index :        Index_Up_Max := 1;
+      Block : in out Control_Block);
 
    --  Put Text and CR, LF into Up buffer with given Index of the control
    --  block.
    procedure Put_Line
-     (Text  : String;
-      Block : not null access Control_Block;
-      Index : Index_Up_Max := 1);
+     (Text  :        String;
+      Index :        Index_Up_Max := 1;
+      Block : in out Control_Block);
 
    --  Dump Value in binary format. Could be used for plotting graphs with
    --  Cortex Debug.
    procedure Put
-     (Value : Integer;
-      Block : not null access Control_Block;
-      Index : Index_Up_Max := 1);
+     (Value :        Integer;
+      Index :        Index_Up_Max := 1;
+      Block : in out Control_Block);
 
 end RTT;
 

@@ -1,38 +1,57 @@
-with Interfaces.C;
-
-with Elansys.Arrays;
-
-with RTT;
-
-package RTT_IO with
-  Abstract_State => State,
-  Initializes => State
+package body RTT_IO with
+   Refined_State => (State => Control_Block)
 is
-   use type Interfaces.C.char_array;
 
-   Terminal : constant Interfaces.C.char_array :=
-     ("Terminal" & Interfaces.C.nul);
-
-   Graph : constant Interfaces.C.char_array := ("Graph" & Interfaces.C.nul);
-
-   Terminal_Output : Elansys.Arrays.Natural_8_Array (1 .. 256);
-   Graph_Output    : Elansys.Arrays.Natural_8_Array (1 .. 16);
+   Control_Block : RTT.Control_Block :=
+     (Max_Up_Buffers   => RTT.Up_Buffers,
+      Max_Down_Buffers => RTT.Down_Buffers,
+      Up               =>
+        (1 =>
+             (Name   => Terminal'Address,
+              Buffer => Terminal_Output'Address,
+              Size   => Terminal_Output'Length,
+              others => <>)
+         --  2 =>
+         --    (Name   => Graph'Address,
+         --     Buffer => Graph_Output'Address,
+         --     Size   => Graph_Output'Length,
+         --     others => <>)
+        ),
+      others           => <>) with
+     Export, External_Name => "_SEGGER_RTT";
 
    procedure Put
      (Text  : String;
-      Index : Positive := 1);
-   --  Put Text.
+      Index : Positive := 1)
+   is
+   begin
+      RTT.Put
+        (Text  => Text,
+         Index => Index,
+         Block => Control_Block);
+   end Put;
 
    procedure Put_Line
      (Text  : String;
-      Index : Positive := 1);
-   --  Put Text and CR, LF.
+      Index : Positive := 1)
+   is
+   begin
+      RTT.Put_Line
+        (Text  => Text,
+         Index => Index,
+         Block => Control_Block);
+   end Put_Line;
 
    procedure Put
      (Value : Integer;
-      Index : Positive := 1);
-   --  Dump Value in binary format. Could be used for plotting graphs with
-   --  Cortex Debug.
+      Index : Positive := 1)
+   is
+   begin
+      RTT.Put
+        (Value => Value,
+         Index => Index,
+         Block => Control_Block);
+   end Put;
 
 end RTT_IO;
 

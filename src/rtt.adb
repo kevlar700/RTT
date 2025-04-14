@@ -1,16 +1,16 @@
 package body RTT is
 
    procedure Put
-     (Value : Integer;
-      Block : not null access Control_Block;
-      Index : Index_Up_Max := 1)
+     (Value :        Integer;
+      Index :        Index_Up_Max := 1;
+      Block : in out Control_Block)
    is
       Copy : aliased Integer := Value;
       subtype UInt8_Array is Elansys.Arrays.Natural_8_Array (1 .. 4);
       Data : UInt8_Array with
         Import, Address => Copy'Address;
    begin
-      Write (Block.all, Index, Data);
+      Write (Block, Index, Data);
    end Put;
 
    ---------
@@ -18,15 +18,15 @@ package body RTT is
    ---------
 
    procedure Put
-     (Text  : String;
-      Block : not null access Control_Block;
-      Index : Index_Up_Max := 1)
+     (Text  :        String;
+      Index :        Index_Up_Max := 1;
+      Block : in out Control_Block)
    is
       subtype UInt8_Array is Elansys.Arrays.Natural_8_Array (Text'Range);
       Data : UInt8_Array with
         Import, Address => Text'Address;
    begin
-      Write (Block.all, Index, Data);
+      Write (Block, Index, Data);
    end Put;
 
    --------------
@@ -34,17 +34,17 @@ package body RTT is
    --------------
 
    procedure Put_Line
-     (Text  : String;
-      Block : not null access Control_Block;
-      Index : Index_Up_Max := 1)
+     (Text  :        String;
+      Index :        Index_Up_Max := 1;
+      Block : in out Control_Block)
    is
       subtype UInt8_Array is Elansys.Arrays.Natural_8_Array (Text'Range);
       Data : UInt8_Array with
         Import, Address => Text'Address;
    begin
-      Write (Block.all, Index, Data);
+      Write (Block, Index, Data);
       Write
-        (Block.all,
+        (Block,
          Index,
         (16#0D#,
           16#0A#));
